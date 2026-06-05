@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Electoral Gap — Multi-State Program</title>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=addell-sans@400,500,600,700&display=swap">
+<style>
+:root {
+  --bg-primary:#031b27; --bg-secondary:#052535; --text-primary:#fff; --text-secondary:#cbd5e0;
+  --text-muted:#718096; --accent:#ff6b35; --accent-secondary:#00a8ff; --accent-glow:rgba(255,107,53,.3);
+  --font-display:'Addell Sans',sans-serif; --font-body:'Addell Sans',sans-serif;
+  --slide-padding:clamp(1.5rem,4vw,3rem); --ease:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-snap-type:y mandatory}
+body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);overflow-x:hidden}
+.slide{min-height:100vh;padding:var(--slide-padding);scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.slide.alt{background:var(--bg-secondary)}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.slide.visible .reveal{opacity:1;transform:translateY(0)}
+.reveal:nth-child(2){transition-delay:.12s}.reveal:nth-child(3){transition-delay:.24s}
+.reveal:nth-child(4){transition-delay:.36s}.reveal:nth-child(5){transition-delay:.48s}
+.kicker{color:var(--accent);text-transform:uppercase;letter-spacing:.25em;font-size:.8rem;font-weight:600;margin-bottom:1rem}
+h1{font-size:clamp(2.4rem,7vw,5rem);font-weight:700;line-height:1.05}
+h2{font-size:clamp(1.8rem,4.5vw,3rem);font-weight:700;margin-bottom:1.2rem;line-height:1.1}
+p.lede{font-size:clamp(1rem,1.6vw,1.25rem);color:var(--text-secondary);max-width:62ch;line-height:1.6}
+.big{font-size:clamp(4rem,12vw,9rem);font-weight:700;color:var(--accent);line-height:1;text-shadow:0 0 60px var(--accent-glow)}
+.logo{position:fixed;top:1.2rem;right:1.4rem;height:42px;z-index:50;opacity:.9}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:2rem;max-width:1000px}
+.stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:1.2rem}
+.stat .v{font-size:clamp(1.6rem,3.4vw,2.6rem);font-weight:700;color:var(--accent-secondary)}
+.stat .l{color:var(--text-muted);font-size:.85rem;margin-top:.3rem;line-height:1.35}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-top:1.6rem;max-width:1200px}
+.pcard{background:rgba(255,255,255,.04);border-left:3px solid var(--accent);border-radius:8px;padding:1.1rem 1.2rem}
+.pcard h3{font-size:1.05rem;margin-bottom:.4rem;color:var(--accent)}
+.pcard p{font-size:.88rem;color:var(--text-secondary);line-height:1.45}
+.pcard .n{color:var(--accent-secondary);font-weight:600;font-size:.85rem;display:block;margin-top:.5rem}
+.killed{border-left-color:var(--text-muted);opacity:.65}
+.killed h3{color:var(--text-muted);text-decoration:line-through}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:.9rem;margin-top:1.4rem;max-width:1300px}
+.dcard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:1rem}
+.dcard.reach{border-color:var(--accent);box-shadow:0 0 24px rgba(255,107,53,.15)}
+.dcard-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.6rem}
+.dname{font-size:1.25rem;font-weight:700}
+.d24{color:var(--text-muted);font-size:.8rem}
+.drow{display:flex;justify-content:space-between;font-size:.82rem;color:var(--text-secondary);padding:.14rem 0}
+.drow b{color:var(--text-primary);font-weight:600}
+.dnet{font-size:1.5rem;font-weight:700;text-align:right;margin:.4rem 0 .2rem}
+.dnet.pos{color:#3ddc84}.dnet.neg{color:var(--accent)}
+.dsig{font-size:.75rem;color:var(--accent-secondary)}
+.dverdict{font-size:.7rem;letter-spacing:.15em;color:var(--text-muted);margin-top:.35rem;text-transform:uppercase}
+.bars{max-width:860px;margin-top:1.6rem}
+.bar-item{display:grid;grid-template-columns:240px 1fr 70px;gap:.8rem;align-items:center;margin-bottom:.7rem}
+.bar-label{font-size:.9rem;color:var(--text-secondary);text-align:right}
+.bar-wrap{background:rgba(255,255,255,.06);border-radius:5px;height:26px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#ff8c5a);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.78rem;font-weight:600}
+.bar-fill.blue{background:linear-gradient(90deg,#0077b6,var(--accent-secondary))}
+.bar-val{font-size:.85rem;color:var(--text-muted)}
+.foot{position:absolute;bottom:1rem;left:var(--slide-padding);font-size:.7rem;color:var(--text-muted);max-width:80%}
+.navdots{position:fixed;right:1.1rem;top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;gap:.55rem}
+.navdots a{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.25);display:block;transition:.3s}
+.navdots a.on{background:var(--accent);transform:scale(1.35)}
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:70;width:0}
+.hint{position:fixed;bottom:1rem;right:1.4rem;color:var(--text-muted);font-size:.72rem;z-index:50}
+@media (max-width:768px){.navdots,.hint{display:none}.bar-item{grid-template-columns:130px 1fr 56px}.bar-label{font-size:.72rem}}
+@media (prefers-reduced-motion:reduce){.reveal{transition:opacity .3s ease;transform:none}}
+
+.tgrid{display:grid;grid-template-columns:90px repeat(5,1fr);gap:5px;max-width:1100px;margin-top:1.6rem}
+.tg-h{font-size:.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;display:flex;align-items:center;justify-content:center;text-align:center}
+.tg-r{font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center}
+.tg-c{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:.7rem .5rem;text-align:center}
+.tg-c.lit{border-color:var(--accent);box-shadow:0 0 18px rgba(255,107,53,.18);background:rgba(255,107,53,.07)}
+.cv{font-size:clamp(1rem,1.9vw,1.5rem);font-weight:700}
+.cr{font-size:.72rem;color:var(--accent);font-weight:600;margin-top:.2rem}
+
+/* Timing bar */
+.timeline{max-width:1000px;margin-top:2rem}
+.tl-track{display:flex;height:54px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+.tl-seg{display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:600;letter-spacing:.04em}
+.tl-idle{flex:17;background:repeating-linear-gradient(45deg,rgba(255,255,255,.03),rgba(255,255,255,.03) 8px,rgba(255,255,255,.07) 8px,rgba(255,255,255,.07) 16px);color:var(--text-muted)}
+.tl-burn{flex:19;background:linear-gradient(90deg,var(--accent),#ff8c5a);color:#031b27}
+.tl-labels{display:flex;justify-content:space-between;font-size:.72rem;color:var(--text-muted);margin-top:.5rem}
+.tl-track2{display:flex;height:54px;border-radius:8px;overflow:hidden;border:1px solid rgba(0,168,255,.35);margin-top:1.6rem}
+.tl-build{flex:100;background:linear-gradient(90deg,rgba(0,119,182,.5),var(--accent-secondary));color:#031b27;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:600}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<img class="logo" src="causeway-solutions-logo-rgb_stacked-invert.png" alt="Causeway Solutions" onerror="this.style.display='none'">
+<nav class="navdots" id="dots"></nav>
+<div class="hint">↑ ↓ or scroll</div>
+
+<!-- 1 · TITLE -->
+<section class="slide">
+  <p class="kicker reveal">Causeway Solutions · Multi-State Program Briefing · June 2026</p>
+  <h1 class="reveal">THE ELECTORAL GAP</h1>
+  <p class="lede reveal" style="margin-top:1rem;font-size:1.4rem">Six states. Nine House districts. One unoccupied margin.</p>
+  <p class="lede reveal" style="margin-top:1.4rem">The margin of every close race is full of voters both parties ignore. We have their names, the contradictions that move them, and a field-tested $0.12-per-person machine to reach them. Half a million of them sit in nine districts that decide the 2026 House.</p>
+</section>
+
+<!-- 2 · THE GAP -->
+<section class="slide alt">
+  <p class="kicker reveal">The Gap</p>
+  <div class="big reveal">30.4M</div>
+  <h2 class="reveal">Reinforcement voters — conditional, issue-responsive, unactivated</h2>
+  <p class="lede reveal">Every competitive campaign runs the same two plays: persuade high-turnout swing voters, mobilize the base. Both plays are correct — and fully priced in. What remains is the actual margin of the 2026 House: mid- and low-turnout voters whose participation is conditional and issue-driven — 27.5 million reachable from a Republican perspective. Too unlikely to vote for GOTV budgets. Too mixed on the ballot for safe persuasion. So nobody talks to them at all.</p>
+  <div class="tgrid reveal">
+    <div></div><div class="tg-h">Hard Dem</div><div class="tg-h">Lean Dem</div><div class="tg-h">Swing</div><div class="tg-h">Lean GOP</div><div class="tg-h">Hard GOP</div>
+    <div class="tg-r">High<br>turnout</div>
+    <div class="tg-c"><div class="cv">32.5M</div></div><div class="tg-c"><div class="cv">3.8M</div></div><div class="tg-c"><div class="cv">10.6M</div></div><div class="tg-c"><div class="cv">5.7M</div></div><div class="tg-c"><div class="cv">27.2M</div></div>
+    <div class="tg-r">Mid<br>turnout</div>
+    <div class="tg-c"><div class="cv">20.5M</div></div>
+    <div class="tg-c lit"><div class="cv">3.6M</div><div class="cr">1.5M reinf.</div></div>
+    <div class="tg-c lit"><div class="cv">10.6M</div><div class="cr">9.2M reinf.</div></div>
+    <div class="tg-c lit"><div class="cv">3.8M</div><div class="cr">3.2M reinf.</div></div>
+    <div class="tg-c"><div class="cv">13.3M</div></div>
+    <div class="tg-r">Low<br>turnout</div>
+    <div class="tg-c"><div class="cv">24.6M</div></div>
+    <div class="tg-c lit"><div class="cv">15.4M</div><div class="cr">1.7M reinf.</div></div>
+    <div class="tg-c lit"><div class="cv">27.0M</div><div class="cr">9.9M reinf.</div></div>
+    <div class="tg-c lit"><div class="cv">4.9M</div><div class="cr">2.0M reinf.</div></div>
+    <div class="tg-c"><div class="cv">14.1M</div></div>
+  </div>
+  <div class="foot">Causeway reinforcement framework, June 2026 vintage. Highlighted cells are the conditional middle — the six cells both parties&rsquo; models skip. Orange counts: GOP-perspective reinforcement voters; the six cells sum to 27.5M.</div>
+</section>
+
+<!-- 3 · PARADOX SEGMENTS -->
+<section class="slide">
+  <p class="kicker reveal">The Creative Engine</p>
+  <h2 class="reveal">Paradox segments: the contradiction is the targeting surface</h2>
+  <p class="lede reveal">These voters are conditional because they're conflicted — their beliefs don't resolve into a party line, so neither party's message lands. Whoever resolves the tension wins them.</p>
+  <div class="pgrid">
+    <div class="pcard reveal"><h3>Tariff Patriots, Squeezed at the Register</h3><p>Back China tariffs and rate inflation a top concern. The policy they support feeds the price pain they feel.</p><span class="n">10.5K–34.7K per district · dominant in MI &amp; PA</span></div>
+    <div class="pcard reveal"><h3>Feed Regulators</h3><p>Want social media regulated — and use it every day. The largest paradox in the data, and the message meets them on the very platforms it's about.</p><span class="n">18.8K–47.2K per district · half of every pool</span></div>
+    <div class="pcard reveal"><h3>AI-Anxious Adopters</h3><p>Use the tools, fear the grid. Want AI regulation strengthened and prioritize clean energy — the 2026 current-events wave.</p><span class="n">8.3K–24.5K per district · Wisconsin's signature</span></div>
+    <div class="pcard reveal"><h3>Fans Who Won't Fund Stadiums</h3><p>Follow the game closely, oppose tax dollars for the owner's stadium. Love the sport, not the bill.</p><span class="n">15.4K–33.1K per district · everywhere</span></div>
+    <div class="pcard reveal"><h3>Fiscal Hawks Who Love Benefits</h3><p>Fiscally conservative and favorable to infrastructure &amp; Medicare spending. The governing tension of the GOP coalition.</p><span class="n">5.4K–16.9K per district</span></div>
+    <div class="pcard reveal"><h3>Drill-Here Environmentalists</h3><p>Natural gas realism with a conservation conscience.</p><span class="n">4.5K–8.8K per district</span></div>
+    <div class="pcard reveal"><h3>Trust-Gap Voters</h3><p>Doubt mail-ballot security and vote only conditionally. Activation here is trust repair, not motivation.</p><span class="n">2.7K–6.7K per district · biggest in PA</span></div>
+    <div class="pcard reveal"><h3>Trump-Voted, Trump-Tired</h3><p>Cast a Trump ballot in '24, disapprove today. The hold-the-line segment every R margin quietly depends on.</p><span class="n">2.6K–8.8K per district</span></div>
+    <div class="pcard reveal"><h3>Pro-Choice Conservatives</h3><p>Socially conservative self-ID, pro-choice position. Cross-pressured on the loudest issue in politics.</p><span class="n">2.0K–6.6K per district · PA-07's sleeper</span></div>
+  </div>
+  <div class="foot">Paradox segments cover 76–84% of the reinforcement pool in every one of the nine districts.</div>
+</section>
+
+<!-- 4 · PROOF LOOP -->
+<section class="slide alt">
+  <p class="kicker reveal">The Proof Loop</p>
+  <h2 class="reveal">Where these voters come from — in their own words</h2>
+  <p class="lede reveal">The last time we went into the field, we asked 7,214 American voters directly. We isolated the conditional voters — turnout-unsure or ballot-unsettled, the reinforcement profile in miniature — and asked who they are.</p>
+  <div class="statgrid" style="margin-top:1.4rem">
+    <div class="stat reveal"><div class="v">39%</div><div class="l">call themselves Independent — their largest party is <b>none</b> (vs 26% of all adults)</div></div>
+    <div class="stat reveal"><div class="v">26%</div><div class="l">sat out 2024 or voted third party — <b>4x the rate</b> of everyone else. They come from the sidelines, not from either base</div></div>
+    <div class="stat reveal"><div class="v">R+3</div><div class="l">Trump 38.5 / Harris 35.4 among those who did vote in '24 — when they show up, they tilt right</div></div>
+    <div class="stat reveal"><div class="v">93%</div><div class="l">say "somewhat likely" or "unsure" for 2026 — every one of their votes is live, none are locked</div></div>
+  </div>
+  <h2 class="reveal" style="margin-top:2.2rem;font-size:clamp(1.3rem,3vw,2rem)">Their list is not either party's list</h2>
+  <div class="bars">
+    <div class="bar-item reveal"><div class="bar-label">Reducing inflation</div><div class="bar-wrap"><div class="bar-fill" style="width:55%">55%</div></div><div class="bar-val">#1</div></div>
+    <div class="bar-item reveal"><div class="bar-label">Protecting Social Security &amp; Medicare</div><div class="bar-wrap"><div class="bar-fill" style="width:54.5%">55%</div></div><div class="bar-val">#2</div></div>
+    <div class="bar-item reveal"><div class="bar-label">Reducing crime</div><div class="bar-wrap"><div class="bar-fill" style="width:43.3%">43%</div></div><div class="bar-val">#3</div></div>
+    <div class="bar-item reveal"><div class="bar-label">Prescription drug prices</div><div class="bar-wrap"><div class="bar-fill" style="width:36.5%">37%</div></div><div class="bar-val">#4</div></div>
+    <div class="bar-item reveal"><div class="bar-label">Securing the border</div><div class="bar-wrap"><div class="bar-fill blue" style="width:23.8%;opacity:.55">24%</div></div><div class="bar-val">#6</div></div>
+    <div class="bar-item reveal"><div class="bar-label">Addressing climate change</div><div class="bar-wrap"><div class="bar-fill blue" style="width:21.5%;opacity:.55">22%</div></div><div class="bar-val">#7</div></div>
+  </div>
+  <div class="foot">% ranking each issue top-3 urgent among conditional voters. The contradictions are measured here too — 43% hold the AI paradox, 47% the fiscal-hawk-benefits paradox — then modeled to 217M voterfile records and priced district by district. Survey proves the contradiction. Model finds it at scale. District math prices it.</div>
+</section>
+
+<!-- 5 · DISTRICT MATH -->
+<section class="slide alt">
+  <p class="kicker reveal">The Math · Six States, Nine Districts</p>
+  <h2 class="reveal">District math: what winning actually requires</h2>
+  <p class="lede reveal">Every district is Cook-competitive. Vote goal = 55% of expected turnout — built to win with cushion, not scrape 50.1%. Read it the way an investor would: single-digit-thousands gaps against pools of fifty to eighty thousand issue-responsive voters nobody else is contacting. Seven of nine clear on the activation lever alone; the two Michigan reach cases have a second lever built in.</p>
+  <div class="dgrid">
+    <div class="dcard reveal">
+      <div class="dcard-head"><span class="dname">IA-01</span><span class="d24">R+0.2</span></div>
+      <div class="drow"><span>Vote goal (55%)</span><b>151,243</b></div>
+      <div class="drow"><span>Expected R vote</span><b>139,828</b></div>
+      <div class="drow"><span>Reinforcement pool</span><b>79,296</b></div>
+      <div class="drow"><span>Available (net new)</span><b>+43,226</b></div>
+      <div class="dnet pos">+31,811</div>
+      <div class="dverdict">CLEARS</div>
+    </div>
+    <div class="dcard reveal">
+      <div class="dcard-head"><span class="dname">WI-03</span><span class="d24">R+3</span></div>
+      <div class="drow"><span>Vote goal (55%)</span><b>187,563</b></div>
+      <div class="drow"><span>Expected R vote</span><b>183,952</b></div>
+      <div class="drow"><span>Reinforcement pool</span><b>54,278</b></div>
+      <div class="drow"><span>Available (net new)</span><b>+34,224</b></div>
+      <div class="dnet pos">+30,613</div>
+      <div class="dverdict">CLEARS</div>
+    </div>
+    <div class="dcard reveal">
+      <div class="dcard-head"><span class="dname">AZ-01</span><span class="d24">R+4 · open</span></div>
+      <div class="drow"><span>Vote goal (55%)</span><b>158,318</b></div>
+      <div class="drow"><span>Expected R vote</span><b>146,215</b></div>
+      <div class="drow"><span>Reinforcement pool</span><b>73,774</b></div>
+      <div class="drow"><span>Available (net new)</span><b>+37,861</b></div>
+      <div class="dnet pos">+25,758</div>
+      <div class="dverdict">CLEARS</div>
+    </div>
+    <div class="dcard reveal">
+      <div class="dcard-head"><span class="dname">PA-07</span><span class="d24">R+1</span></div>
+      <div class="drow"><span>Vote goal (55%)</span><b>135,678</b></div>
+      <div class="drow"><span>Expected R vote</span><b>120,419</b></div>
+      <div class="drow"><span>Reinforcement pool</span><b>65,583</b></div>
+      <div class="drow"><span>Available (net new)</span><b>+36,931</b></div>
+      <div class="dnet pos">+21,672</div>
+      <div class="dverdict">CLEARS</div>
+    </div>
+    <div class="dcard reveal">
+      <div class="dcard-head"><span class="dname">AZ-06</span><span class="d24">R+3</span></div>
+      <div class="drow"><span>Vote goal (55%)</span><b>157,153</b></div>
+      <div class="drow"><span>Expected R vote</span><b>139,243</b></div>
+      <div class="drow"><span>Reinforcement pool</span><b>71,860</b></div>
+      <div class="drow"><span>Available (net new)</span><b>+38,133</b></div>
+      <div class="dnet pos">+20,223</div>
+      <div class="dverdict">CLEARS</div>
+    </div>
+    <div class="dcard reveal">
+      <div class="dcard-head"><span class="dname">PA-08</span><span class="d24">R+1</span></div>
+      <div class="drow"><span>Vote goal (55%)</span><b>130,692</b></div>
+      <div class="drow"><span>Expected R vote</span><b>118,476</b></div>
+      <div class="drow"><span>Reinforcement pool</span><b>54,927</b></div>
+      <div class="drow"><span>Available (net new)</span><b>+31,337</b></div>
+      <div class="dnet pos">+19,121</div>
+      <div class="dverdict">CLEARS</div>
+    </div>
+    <div class="dcard reveal">
+      <div class="dcard-head"><span class="dname">NC-01</span><span class="d24">Lean R</span></div>
+      <div class="drow"><span>Vote goal (55%)</span><b>130,162</b></div>
+      <div class="drow"><span>Expected R vote</span><b>98,851</b></div>
+      <div class="drow"><span>Reinforcement pool</span><b>76,827</b></div>
+      <div class="drow"><span>Available (net new)</span><b>+43,469</b></div>
+      <div class="dnet pos">+12,158</div>
+      <div class="dverdict">CLEARS</div>
+    </div>
+    <div class="dcard reveal reach">
+      <div class="dcard-head"><span class="dname">MI-07</span><span class="d24">R+4</span></div>
+      <div class="drow"><span>Vote goal (55%)</span><b>199,006</b></div>
+      <div class="drow"><span>Expected R vote</span><b>168,781</b></div>
+      <div class="drow"><span>Reinforcement pool</span><b>37,675</b></div>
+      <div class="drow"><span>Available (net new)</span><b>+21,188</b></div>
+      <div class="dnet neg">−9,037</div>
+      <div class="dverdict">REACH · TWO-LEVER</div>
+    </div>
+    <div class="dcard reveal reach">
+      <div class="dcard-head"><span class="dname">MI-10</span><span class="d24">Lean R</span></div>
+      <div class="drow"><span>Vote goal (55%)</span><b>184,180</b></div>
+      <div class="drow"><span>Expected R vote</span><b>143,195</b></div>
+      <div class="drow"><span>Reinforcement pool</span><b>41,543</b></div>
+      <div class="drow"><span>Available (net new)</span><b>+22,981</b></div>
+      <div class="dnet neg">−18,004</div>
+      <div class="dverdict">REACH · TWO-LEVER</div>
+    </div>
+  </div>
+  <div class="foot">Available counts only net-new votes (existing turnout probability subtracted). Both Michigan districts are two-lever cases: MI-07 has 11,885 and MI-10 has 12,306 paradox voters who already vote and are swing-ballot by definition — persuasion closes what activation alone cannot.</div>
+</section>
+
+<!-- 6 · 2024 MACHINE -->
+<section class="slide">
+  <p class="kicker reveal">The Machine Exists</p>
+  <h2 class="reveal">2024: field-tested at battleground scale</h2>
+  <div class="statgrid">
+    <div class="stat reveal"><div class="v">48M</div><div class="l">impressions delivered · 10.5M devices engaged</div></div>
+    <div class="stat reveal"><div class="v">7.4M</div><div class="l">voters reached · 6.5M households</div></div>
+    <div class="stat reveal"><div class="v">$0.12</div><div class="l">cost per person · $19 blended CPM</div></div>
+    <div class="stat reveal"><div class="v">56%</div><div class="l">video completion · 6.5x frequency per person, 7.3x per household</div></div>
+    <div class="stat reveal"><div class="v">86%</div><div class="l">of delivery in MI + PA — home of four of these nine districts</div></div>
+  </div>
+  <p class="lede reveal" style="margin-top:1.6rem">Channel mix: 70% pre-roll (the reach engine, ~$11 CPM) and 30% CTV (premium frequency, ~$38 CPM). CTV completed at ~99% versus ~39% for skippable pre-roll — a lever 2026 leans into.</p>
+  <div class="foot">Source: 2024 Digital Video Campaign Performance Review.</div>
+</section>
+
+<!-- 7 · TIMING STORY -->
+<section class="slide alt">
+  <p class="kicker reveal">The Constraint</p>
+  <h2 class="reveal">All of it ran in 19 days</h2>
+  <p class="lede reveal">Every 2024 impression was compressed into the final sprint: spend started October 18, ramped to ~2.5–3M impressions a day, and stopped cold at Election Day. Frequency was capped by calendar, not budget. The runway before October sat unused.</p>
+  <div class="timeline reveal">
+    <div class="tl-track">
+      <div class="tl-seg tl-idle">Runway unspent</div>
+      <div class="tl-seg tl-burn">Oct 18 → Nov 5 · 48M impressions in 19 days</div>
+    </div>
+    <div class="tl-labels"><span>Oct 1</span><span>Oct 18</span><span>Nov 5</span></div>
+    <div class="tl-track2">
+      <div class="tl-build">2026 · Jul → Nov · the same engine, sixteen weeks of runway</div>
+    </div>
+    <div class="tl-labels"><span>Jul</span><span>Sep</span><span>Nov 3</span></div>
+  </div>
+  <p class="lede reveal" style="margin-top:1.6rem">Which makes 2026 less a redesign than a release of constraints. The engine already proved it can deliver at battleground scale. Now it gets the calendar too.</p>
+</section>
+
+<!-- 8 · 2026 PLAN -->
+<section class="slide">
+  <p class="kicker reveal">2026</p>
+  <h2 class="reveal">Start earlier. Go narrower. Finish stronger.</h2>
+  <div class="pgrid" style="max-width:1100px">
+    <div class="pcard reveal"><h3>Phase 1 · Jul–Aug · Foundation</h3><p>Cheap summer inventory. Build 4–6x base frequency on the full nine-district paradox universe. A/B creative by segment — every paradox gets its own tension-resolving message, tested before it matters.</p></div>
+    <div class="pcard reveal"><h3>Phase 2 · Sep–Oct · Issue Windows</h3><p>Ride the news. AI &amp; data-center headlines trigger the AI-Anxious and Feed Regulator flights; price spikes trigger Tariff Patriots; stadium-funding fights trigger the Fans. The segments are pre-built, the triggers are free.</p></div>
+    <div class="pcard reveal"><h3>Phase 3 · Final 3 weeks · CTV Close</h3><p>Heavy CTV mix (~99% completion vs ~39% skippable pre-roll) aimed at the persuasion lever: the paradox voters who already vote, especially the 24K of them in the two Michigan districts.</p></div>
+  </div>
+  <div class="pgrid" style="max-width:1100px;margin-top:1rem">
+    <div class="pcard reveal" style="border-left-color:var(--accent-secondary)"><h3>We hold the devices</h3><p><b>148,870 mobile ad IDs</b> matched to named voters inside these nine pools — direct, person-level serving to the exact voters in the math. Not lookalikes, not platform black boxes. And they're reachable where they actually are: Facebook .67, YouTube .66, Prime Video .63, broadcast .57 — not political X (9%) or Truth Social (&lt;1%).</p></div>
+    <div class="pcard reveal" style="border-left-color:var(--accent-secondary)"><h3>Unit economics</h3><p>2024 delivered 6.5x frequency at $19 blended CPM, $0.12 per voter reached — in 19 days. A 556K named-voter universe at 15x over sixteen weeks is roughly 7.5M impressions: low-six-figure media for margin-of-victory coverage across nine House districts in six states.</p></div>
+  </div>
+  <p class="lede reveal" style="margin-top:1.4rem">Everyone else is bidding up the same nine million high-turnout swing voters. Half a million genuinely decisive voters go unclaimed — at twelve cents a head.</p>
+</section>
+
+<!-- 9 · THE ASSET -->
+<section class="slide alt">
+  <p class="kicker reveal">Beyond Nine Districts</p>
+  <h2 class="reveal">The districts are the demonstration. The engine is the asset.</h2>
+  <p class="lede reveal">Nothing here is bespoke. The reinforcement grid, the paradox-segment mining, the two-lever district math, and the survey-to-model proof loop run anywhere there's a voterfile and a close race — any state, any cycle, any issue set, either party's perspective. The survey re-fields as events shift; the model layer refreshes against it. AI and data centers weren't a ballot issue two years ago. The next issue wave is already forming — and this framework is built to catch it.</p>
+  <div class="statgrid" style="margin-top:1.8rem">
+    <div class="stat reveal"><div class="v">6 → 50</div><div class="l">states the framework extends to — every voterfile record in the country is already scored</div></div>
+    <div class="stat reveal"><div class="v">217M</div><div class="l">voterfile records carrying 130+ modeled issue, engagement, and media scores</div></div>
+    <div class="stat reveal"><div class="v">2 levers</div><div class="l">activation and persuasion — priced separately, honestly, district by district</div></div>
+    <div class="stat reveal"><div class="v">Either side</div><div class="l">the same math runs from a Democratic perspective — 27.1M reinforcement voters on that ledger</div></div>
+  </div>
+</section>
+
+<!-- 10 · CLOSE -->
+<section class="slide">
+  <p class="kicker reveal">The Close</p>
+  <h1 class="reveal" style="font-size:clamp(2rem,5.5vw,4rem)">The margin is unoccupied.<br><span style="color:var(--accent)">We have the names.</span></h1>
+  <p class="lede reveal" style="margin-top:1.4rem">Six states, nine districts, 556,000 named voters, a proven twelve-cent delivery machine, and a calendar that finally works in our favor. The only thing the 2024 engine lacked was time and a sharper list. This is both.</p>
+  <div class="foot">Methodology: Causeway universes_pivoted reinforcement framework (June 2026 vintage, GOP perspective) · politicalondemand modeled scores · most recent national survey wave n=7,214 · 2024 Digital Video Campaign Performance Review. Counts are modeled individual-level estimates, not projections of certain behavior.</div>
+</section>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+const dots=document.getElementById('dots');
+slides.forEach((s,i)=>{const a=document.createElement('a');a.href='#';a.onclick=e=>{e.preventDefault();s.scrollIntoView({behavior:'smooth'})};dots.appendChild(a)});
+const da=[...dots.children];
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('visible');const i=slides.indexOf(e.target);da.forEach((d,j)=>d.classList.toggle('on',j===i));}
+}),{threshold:.45});
+slides.forEach(s=>io.observe(s));
+window.addEventListener('scroll',()=>{const h=document.documentElement;document.getElementById('prog').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'});
+document.addEventListener('keydown',e=>{
+  const cur=slides.findIndex(s=>{const r=s.getBoundingClientRect();return r.top>-innerHeight/2&&r.top<innerHeight/2});
+  if(e.key==='ArrowDown'||e.key===' '){e.preventDefault();slides[Math.min(cur+1,slides.length-1)].scrollIntoView({behavior:'smooth'})}
+  if(e.key==='ArrowUp'){e.preventDefault();slides[Math.max(cur-1,0)].scrollIntoView({behavior:'smooth'})}
+});
+</script>
+</body>
+</html>
