@@ -364,4 +364,76 @@ body.dem .pt-d{display:inline}
 </section>
 
 <!-- 7 · TIMING STORY -->
-<section class="sli
+<section class="slide alt">
+  <p class="kicker reveal">The Constraint</p>
+  <h2 class="reveal">All of it ran in 19 days</h2>
+  <p class="lede reveal">Every 2024 impression was compressed into the final sprint: spend started October 18, ramped to ~2.5–3M impressions a day, and stopped cold at Election Day. Frequency was capped by calendar, not budget. The runway before October sat unused.</p>
+  <div class="timeline reveal">
+    <div class="tl-track">
+      <div class="tl-seg tl-idle">Runway unspent</div>
+      <div class="tl-seg tl-burn">Oct 18 → Nov 5 · 48M impressions in 19 days</div>
+    </div>
+    <div class="tl-labels"><span>Oct 1</span><span>Oct 18</span><span>Nov 5</span></div>
+    <div class="tl-track2">
+      <div class="tl-build">2026 · Jul → Nov · the same engine, sixteen weeks of runway</div>
+    </div>
+    <div class="tl-labels"><span>Jul</span><span>Sep</span><span>Nov 3</span></div>
+  </div>
+  <p class="lede reveal" style="margin-top:1.6rem">Which makes 2026 less a redesign than a release of constraints. The engine already proved it can deliver at battleground scale. Now it gets the calendar too.</p>
+</section>
+
+<!-- 8 · 2026 PLAN -->
+<section class="slide">
+  <p class="kicker reveal">2026</p>
+  <h2 class="reveal">Start earlier. Go narrower. Finish stronger.</h2>
+  <div class="pgrid" style="max-width:1100px">
+    <div class="pcard reveal"><h3>Phase 1 · Jul–Aug · Foundation</h3><p>Cheap summer inventory. Build 4–6x base frequency on the full nine-district paradox universe. A/B creative by segment — every paradox gets its own tension-resolving message, tested before it matters.</p></div>
+    <div class="pcard reveal"><h3>Phase 2 · Sep–Oct · Issue Windows</h3><p>Ride the news. AI &amp; data-center headlines trigger the AI-Anxious and Feed Regulator flights; price spikes trigger Tariff Patriots; stadium-funding fights trigger the Fans. The segments are pre-built, the triggers are free.</p></div>
+    <div class="pcard reveal"><h3>Phase 3 · Final 3 weeks · CTV Close</h3><p>Heavy CTV mix (~99% completion vs ~39% skippable pre-roll) aimed at the persuasion lever: the paradox voters who already vote, especially the 24K of them in the two Michigan districts.</p></div>
+  </div>
+  <div class="pgrid" style="max-width:1100px;margin-top:1rem">
+    <div class="pcard reveal" style="border-left-color:var(--accent-secondary)"><h3>We hold the devices</h3><p><b>148,870 mobile ad IDs</b> matched to named voters inside these nine pools — direct, person-level serving to the exact voters in the math. Not lookalikes, not platform black boxes.</p></div>
+    <div class="pcard reveal" style="border-left-color:var(--accent-secondary)"><h3>Unit economics</h3><p>2024 delivered 6.5x frequency at $19 blended CPM, $0.12 per voter reached — in 19 days. A half-million-voter universe at 15x over sixteen weeks is roughly 7.5M impressions: low-six-figure media for margin-of-victory coverage across nine House districts in six states.</p></div>
+  </div>
+  <p class="lede reveal" style="margin-top:1.4rem">Everyone else is bidding up the same nine million high-turnout swing voters. Half a million genuinely decisive voters go unclaimed — at twelve cents a head.</p>
+</section>
+
+<!-- 9 · THE ASSET -->
+<section class="slide alt">
+  <p class="kicker reveal">Beyond Nine Districts</p>
+  <h2 class="reveal">The districts are the demonstration. The engine is the asset.</h2>
+  <p class="lede reveal">Nothing here is bespoke. The reinforcement grid, the paradox-segment mining, the two-lever district math, and the survey-to-model proof loop run anywhere there's a voterfile and a close race — any state, any cycle, any issue set, either party's perspective. The survey re-fields as events shift; the model layer refreshes against it. AI and data centers weren't a ballot issue two years ago. The next issue wave is already forming — and this framework is built to catch it.</p>
+  <div class="statgrid" style="margin-top:1.8rem">
+    <div class="stat reveal"><div class="v">6 → 50</div><div class="l">states the framework extends to — every voterfile record in the country is already scored</div></div>
+    <div class="stat reveal"><div class="v">217M</div><div class="l">voterfile records carrying 130+ modeled issue, engagement, and media scores</div></div>
+    <div class="stat reveal"><div class="v">2 levers</div><div class="l">activation and persuasion — priced separately, honestly, district by district</div></div>
+    <div class="stat reveal"><div class="v">Either side</div><div class="l"><span class="pt-r">the same math runs from a Democratic perspective — 27.1M reinforcement voters on that ledger</span><span class="pt-d">the same math runs from a Republican perspective — 27.5M reinforcement voters on that ledger</span></div></div>
+  </div>
+</section>
+
+<!-- 10 · CLOSE -->
+<section class="slide">
+  <p class="kicker reveal">The Close</p>
+  <h1 class="reveal" style="font-size:clamp(2rem,5.5vw,4rem)">The margin is unoccupied.<br><span style="color:var(--accent)">We have the names.</span></h1>
+  <p class="lede reveal" style="margin-top:1.4rem">Six states, nine districts, half a million named voters, a proven twelve-cent delivery machine, and a calendar that finally works in our favor. The only thing the 2024 engine lacked was time and a sharper list. This is both.</p>
+  <div class="foot">Methodology: Causeway universes_pivoted reinforcement framework (June 2026 vintage, <span class="pt-r">GOP perspective</span><span class="pt-d">Democratic perspective</span>) · politicalondemand modeled scores · most recent national survey wave n=7,214 · 2024 Digital Video Campaign Performance Review. Counts are modeled individual-level estimates, not projections of certain behavior.</div>
+</section>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+const dots=document.getElementById('dots');
+slides.forEach((s,i)=>{const a=document.createElement('a');a.href='#';a.onclick=e=>{e.preventDefault();s.scrollIntoView({behavior:'smooth'})};dots.appendChild(a)});
+const da=[...dots.children];
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('visible');const i=slides.indexOf(e.target);da.forEach((d,j)=>d.classList.toggle('on',j===i));}
+}),{threshold:.08});
+slides.forEach(s=>io.observe(s));
+window.addEventListener('scroll',()=>{const h=document.documentElement;document.getElementById('prog').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'});
+document.addEventListener('keydown',e=>{
+  const cur=slides.findIndex(s=>{const r=s.getBoundingClientRect();return r.top>-innerHeight/2&&r.top<innerHeight/2});
+  if(e.key==='ArrowDown'||e.key===' '){e.preventDefault();slides[Math.min(cur+1,slides.length-1)].scrollIntoView({behavior:'smooth'})}
+  if(e.key==='ArrowUp'){e.preventDefault();slides[Math.max(cur-1,0)].scrollIntoView({behavior:'smooth'})}
+});
+</script>
+</body>
+</html>
